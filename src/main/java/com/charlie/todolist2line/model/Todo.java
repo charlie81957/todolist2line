@@ -1,4 +1,9 @@
+package com.charlie.todolist2line.model;
+
+
 import java.security.Timestamp;
+
+import lombok.Data;
 
 @Data
 class TodoDto{
