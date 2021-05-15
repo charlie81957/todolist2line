@@ -1,6 +1,6 @@
 package com.charlie.todolist2line.dto;
 
-import java.security.Timestamp;
+import java.sql.Timestamp;
 
 import lombok.Data;
 
