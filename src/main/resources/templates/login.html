@@ -14,24 +14,67 @@
 		<title>TODO List</title>
 	</head>
 	<body>
-		<div class="row">
-            <h1>TODO List</h1>
-            <span>ようこそ！</span>
-        </div>
-		<form>
-            <div class="form-group">
-                <input type="text" id="inputID" class="form-control" placeholder="User ID" required autofocus>
-                <label for="inputID" style="color: brown;">メッセージ1</label>
-            </div>
-            <div class="form-group">
-                <input type="password" id="inputPW" class="form-control" placeholder="Password" required autofocus>
-                <label for="inputPW" style="color: brown;">メッセージ2</label>
-            </div>
-            <div class="form-submit">
-                <button type="submit" id="signIn" class="btn">Sign in</button>
-                <button type="submit" id="signUp" class="btn">Sign up</button>
-            </div>
-		</form>
+		<div class="container">
+			<div class="row">
+				<h1 class="col-lg-3 col-sm-12">TODO List</h1>
+				<span class="col-lg col-sm align-self-center">ようこそ！</span>
+			</div>
+			<br />
+			<form>
+				<div class="form-group row">
+					<input
+						type="text"
+						id="inputID"
+						class="form-control col-lg-4 col-sm-6"
+						placeholder="User ID"
+						required
+						autofocus
+					/>
+					<label
+						for="inputID"
+						class="col-lg col-sm-12"
+						style="color: brown"
+						hidden
+						>メッセージ1</label
+					>
+				</div>
+				<div class="form-group row">
+					<input
+						type="password"
+						id="inputPW"
+						class="form-control col-lg-4 col-sm-6"
+						placeholder="Password"
+						required
+						autofocus
+					/>
+					<label
+						for="inputPW"
+						class="col-lg col-sm-12"
+						style="color: brown"
+						hidden
+						>メッセージ2</label
+					>
+				</div>
+				<div class="form-submit">
+					<button
+						type="button"
+						id="signIn"
+						class="btn btn-outline-primary"
+						disabled
+					>
+						Sign in
+					</button>
+					<button
+						type="button"
+						id="signUp"
+						class="btn btn-outline-primary"
+						disabled
+					>
+						Sign up
+					</button>
+				</div>
+			</form>
+		</div>
 
 		<!-- For Bootstrap -->
 		<script
