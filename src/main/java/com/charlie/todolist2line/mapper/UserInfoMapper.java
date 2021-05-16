@@ -4,7 +4,6 @@ import java.util.Optional;
 
 import com.charlie.todolist2line.model.UserInfo;
 
-
 public interface UserInfoMapper {
     Optional<UserInfo> findUserById(String userId);
     
