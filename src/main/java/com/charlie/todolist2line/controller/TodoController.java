@@ -8,8 +8,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class TodoController {
 
     @RequestMapping("/init")
-    public String Init(){
+    public String Init() {
         return "init";
     }
-    
+
+    @RequestMapping("/")
+    public String Login() {
+        return "login";
+    }
+
+    @RequestMapping("/edit")
+    public String UserEdit() {
+        return "userEdit";
+    }
+
 }
