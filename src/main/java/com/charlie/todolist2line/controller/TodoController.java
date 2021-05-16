@@ -17,4 +17,9 @@ public class TodoController {
         return "login";
     }
 
+    @RequestMapping("/edit")
+    public String UserEdit() {
+        return "userEdit";
+    }
+
 }
