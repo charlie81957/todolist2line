@@ -4,7 +4,6 @@ import java.sql.Timestamp;
 
 import lombok.Data;
 
-
 @Data
 public class TodoDto{
     private String usreId;
