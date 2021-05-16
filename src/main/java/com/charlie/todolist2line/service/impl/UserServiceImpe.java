@@ -12,14 +12,14 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 
 @Component
-public class UserServiceImpe implements UserService{
+public class UserServiceImpe implements UserService {
 
     private UserInfoMapper userInfoMapper;
 
     @Override
     public String createUser(UserInfoDto userInfoDto) {
         Optional<UserInfo> optionalUser = userInfoMapper.findUserById(userInfoDto.getUserId());
-        if(!optionalUser.isPresent()){
+        if (!optionalUser.isPresent()) {
             return "exsistUser";
         }
 
@@ -28,9 +28,9 @@ public class UserServiceImpe implements UserService{
         BeanUtils.copyProperties(userInfoDto, userInfo);
 
         String encryptionPassword = SHA256Utils.getSHA256(userInfoDto.getUserId() + userInfoDto.getUserPassword());
-        userInfo.setEncryptionPassword(encryptionPassword);
+        userInfo.setEncryptedPassword(encryptionPassword);
 
-        userInfoMapper.insertUser(userInfo);    
+        userInfoMapper.insertUser(userInfo);
 
         return "success";
     }
@@ -38,17 +38,16 @@ public class UserServiceImpe implements UserService{
     @Override
     public boolean isAbelToLogin(UserInfoDto userInfoDto) {
         Optional<UserInfo> optionalUser = userInfoMapper.findUserById(userInfoDto.getUserId());
-        if(optionalUser.isPresent()){
+        if (optionalUser.isPresent()) {
             return false;
         }
 
         String encryptionPassword = SHA256Utils.getSHA256(userInfoDto.getUserId() + userInfoDto.getUserPassword());
         UserInfo userInfo = new UserInfo(userInfoDto.getUserId(), encryptionPassword);
 
-        if(optionalUser.get().equals(userInfo)){
+        if (optionalUser.get().equals(userInfo)) {
             return true;
-        }
-        else{
+        } else {
             return false;
         }
     }
