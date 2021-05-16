@@ -6,7 +6,7 @@ import lombok.Data;
 
 
 @Data
-class TodoDto{
+public class TodoDto{
     private String usreId;
     private String todoId;
     private String todoTitle;
