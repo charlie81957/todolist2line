@@ -1,14 +1,26 @@
 package com.charlie.todolist2line.model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserInfo{
+@Entity
+@Table(name = "user_info")
+public class UserInfo {
+
+    @Id
+    @Column(name = "user_id")
     private String userId;
-    private String encryptionPassword;
+
+    @Column(name = "password")
+    private String encryptedPassword;
+
 }

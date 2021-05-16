@@ -19,29 +19,39 @@
 				<h1>ユーザ情報編集</h1>
 			</div>
 			<br />
-			<div class="input-group">
-				<input type="text" class="form-control" placeholder="User ID" />
-				<div class="input-group-prepend">
-					<button type="button" class="btn btn-outline-secondary">検索</button>
-					<button
-						type="button"
-						class="
-							btn btn-outline-secondary
-							dropdown-toggle dropdown-toggle-split
-						"
-						data-toggle="dropdown"
-						aria-haspopup="true"
-						aria-expanded="false"
-					>
-						<span class="sr-only">Toggle Dropdown</span>
-					</button>
-					<div class="dropdown-menu">
-						<a class="dropdown-item" href="#">編集</a>
-						<a class="dropdown-item" href="#">削除</a>
+			<form id="searchForm">
+				<div class="input-group">
+					<input
+						type="text"
+						class="form-control"
+						placeholder="User ID"
+						name="userId"
+						id="userId"
+					/>
+					<div class="input-group-prepend">
+						<button
+							type="button"
+							class="btn btn-outline-secondary"
+							id="btnSearch"
+						>
+							検索
+						</button>
 					</div>
 				</div>
+			</form>
+			<div id="msg" style="color: brown; display: none">メッセージ1</div>
+			<br />
+			<div>
+				<table class="table">
+					<thead class="thead-dark">
+						<tr>
+							<th scope="col">User ID</th>
+							<th scope="col">Password</th>
+						</tr>
+					</thead>
+					<tbody></tbody>
+				</table>
 			</div>
-			<div style="color: brown" hidden>メッセージ1</div>
 		</div>
 
 		<!-- For Bootstrap -->
@@ -61,5 +71,6 @@
 			crossorigin="anonymous"
 		></script>
 		<!-- For Bootstrap -->
+		<script src="/js/userEditTest.js"></script>
 	</body>
 </html>
