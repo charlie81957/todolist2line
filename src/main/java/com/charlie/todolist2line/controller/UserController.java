@@ -10,26 +10,26 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-
 @Controller
 public class UserController {
-    
+
     @Autowired
     private UserService userService;
 
     @RequestMapping(value = "/loginInit")
-    public String loginInit(){
+    public String loginInit() {
         return "login";
     }
 
     /**
      * ユーザ作成
+     * 
      * @param userId
      * @param userPassword
      */
     @ResponseBody
     @RequestMapping(value = "/signUp")
-    public String signUp(@RequestParam UserInfoDto userInfoDto){
+    public String signUp(@RequestParam UserInfoDto userInfoDto) {
         return userService.createUser(userInfoDto);
     }
 
@@ -37,14 +37,14 @@ public class UserController {
      * 
      * @param userInfoDto
      */
-    @ResponseBody           
-    @RequestMapping(value="/signIn", method=RequestMethod.POST)
+    @ResponseBody
+    @RequestMapping(value = "/signIn", method = RequestMethod.POST)
     public boolean SignIn(@RequestParam UserInfoDto userInfoDto) {
-        return userService.isAbelToLogin(userInfoDto);
+        return userService.isAbleToLogin(userInfoDto);
     }
-    
+
     @RequestMapping(value = "/loguot")
-    public String logout(){
+    public String logout() {
         return this.loginInit();
     }
 }

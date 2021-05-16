@@ -3,22 +3,27 @@ package com.charlie.todolist2line.service.impl;
 import java.util.Optional;
 
 import com.charlie.todolist2line.dto.UserInfoDto;
-import com.charlie.todolist2line.mapper.UserInfoMapper;
 import com.charlie.todolist2line.model.UserInfo;
+import com.charlie.todolist2line.repo.UserRepository;
 import com.charlie.todolist2line.service.UserService;
 import com.charlie.todolist2line.utils.SHA256Utils;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class UserServiceImpe implements UserService {
 
-    private UserInfoMapper userInfoMapper;
+    @Autowired
+    private UserRepository userRepo;
 
+    /**
+     * ユーザの新規登録
+     */
     @Override
     public String createUser(UserInfoDto userInfoDto) {
-        Optional<UserInfo> optionalUser = userInfoMapper.findUserById(userInfoDto.getUserId());
+        Optional<UserInfo> optionalUser = userRepo.findById(userInfoDto.getUserId());
         if (!optionalUser.isPresent()) {
             return "exsistUser";
         }
@@ -30,14 +35,17 @@ public class UserServiceImpe implements UserService {
         String encryptionPassword = SHA256Utils.getSHA256(userInfoDto.getUserId() + userInfoDto.getUserPassword());
         userInfo.setEncryptedPassword(encryptionPassword);
 
-        userInfoMapper.insertUser(userInfo);
+        userRepo.save(userInfo);
 
         return "success";
     }
 
+    /**
+     * ログイン時のレコード存在確認およびパスワード一致確認
+     */
     @Override
-    public boolean isAbelToLogin(UserInfoDto userInfoDto) {
-        Optional<UserInfo> optionalUser = userInfoMapper.findUserById(userInfoDto.getUserId());
+    public boolean isAbleToLogin(UserInfoDto userInfoDto) {
+        Optional<UserInfo> optionalUser = userRepo.findById(userInfoDto.getUserId());
         if (optionalUser.isPresent()) {
             return false;
         }
@@ -49,6 +57,49 @@ public class UserServiceImpe implements UserService {
             return true;
         } else {
             return false;
+        }
+    }
+
+    /**
+     * ユーザの検索
+     * 
+     * @param id
+     * @return
+     */
+    @Override
+    public UserInfo findUserById(String id) {
+        return userRepo.findById(id).get();
+    }
+
+    /**
+     * ユーザ情報の更新
+     * 
+     * @param user
+     * @return
+     */
+    @Override
+    public String updateUser(UserInfo user) {
+        try {
+            userRepo.save(user);
+            return user.getUserId() + "was updated.";
+        } catch (Exception e) {
+            return "System error happened.";
+        }
+    }
+
+    /**
+     * ユーザ情報の削除
+     * 
+     * @param id
+     * @return
+     */
+    @Override
+    public String deleteUser(String id) {
+        try {
+            userRepo.deleteById(id);
+            return id + "was deleted.";
+        } catch (Exception e) {
+            return "System error happened.";
         }
     }
 
