@@ -17,6 +17,6 @@ public class UserInfo {
     private String userId;
 
     @Column(name = "password")
-    private String password;
+    private String encryptedPassword;
 
 }
