@@ -8,7 +8,6 @@ import com.charlie.todolist2line.model.UserInfo;
 import com.charlie.todolist2line.service.UserService;
 import com.charlie.todolist2line.utils.SHA256Utils;
 
-import org.apache.catalina.User;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
