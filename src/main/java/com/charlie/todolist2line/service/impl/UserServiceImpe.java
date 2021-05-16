@@ -1,5 +1,6 @@
 package com.charlie.todolist2line.service.impl;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import com.charlie.todolist2line.dto.UserInfoDto;
@@ -19,25 +20,20 @@ public class UserServiceImpe implements UserService {
     private UserRepository userRepo;
 
     /**
-     * ユーザの新規登録
+     * ユーザの検索
+     * 
+     * @param id
+     * @return
      */
     @Override
-    public String createUser(UserInfoDto userInfoDto) {
-        Optional<UserInfo> optionalUser = userRepo.findById(userInfoDto.getUserId());
-        if (!optionalUser.isPresent()) {
-            return "exsistUser";
+    public UserInfo findUserById(String id) {
+        try {
+            return userRepo.findById(id).get();
+        } catch (NoSuchElementException e) {
+            return null;
+        } catch (Exception e) {
+            return null;
         }
-
-        UserInfo userInfo = new UserInfo();
-
-        BeanUtils.copyProperties(userInfoDto, userInfo);
-
-        String encryptionPassword = SHA256Utils.getSHA256(userInfoDto.getUserId() + userInfoDto.getUserPassword());
-        userInfo.setEncryptedPassword(encryptionPassword);
-
-        userRepo.save(userInfo);
-
-        return "success";
     }
 
     /**
@@ -46,7 +42,7 @@ public class UserServiceImpe implements UserService {
     @Override
     public boolean isAbleToLogin(UserInfoDto userInfoDto) {
         Optional<UserInfo> optionalUser = userRepo.findById(userInfoDto.getUserId());
-        if (optionalUser.isPresent()) {
+        if (!optionalUser.isPresent()) {
             return false;
         }
 
@@ -61,14 +57,25 @@ public class UserServiceImpe implements UserService {
     }
 
     /**
-     * ユーザの検索
-     * 
-     * @param id
-     * @return
+     * ユーザの新規登録
      */
     @Override
-    public UserInfo findUserById(String id) {
-        return userRepo.findById(id).get();
+    public String createUser(UserInfoDto userInfoDto) {
+        Optional<UserInfo> optionalUser = userRepo.findById(userInfoDto.getUserId());
+        if (optionalUser.isPresent()) {
+            return "exsistUser";
+        }
+
+        UserInfo userInfo = new UserInfo();
+
+        BeanUtils.copyProperties(userInfoDto, userInfo);
+
+        String encryptionPassword = SHA256Utils.getSHA256(userInfoDto.getUserId() + userInfoDto.getUserPassword());
+        userInfo.setEncryptedPassword(encryptionPassword);
+
+        userRepo.save(userInfo);
+
+        return "success";
     }
 
     /**
