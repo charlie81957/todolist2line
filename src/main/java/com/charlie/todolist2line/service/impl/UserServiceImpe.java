@@ -27,8 +27,8 @@ public class UserServiceImpe implements UserService{
 
         BeanUtils.copyProperties(userInfoDto, userInfo);
 
-        String encryptionPassword = SHA256Utils.getSHA256(userInfoDto.getUserId() + userInfoDto.getUserPassword());
-        userInfo.setEncryptionPassword(encryptionPassword);
+        String encryptedPassword = SHA256Utils.getSHA256(userInfoDto.getUserId() + userInfoDto.getUserPassword());
+        userInfo.setEncryptedPassword(encryptedPassword);
 
         userInfoMapper.insertUser(userInfo);    
 
