@@ -43,7 +43,7 @@ public class UserController {
         return userService.isAbleToLogin(userInfoDto);
     }
 
-    @RequestMapping(value = "/loguot")
+    @RequestMapping(value = "/logout")
     public String logout() {
         return this.loginInit();
     }

@@ -30,6 +30,7 @@ public class UserServiceImpe implements UserService {
         try {
             return userRepo.findById(id).get();
         } catch (NoSuchElementException e) {
+            // 指定したIDが存在しなかった場合
             return null;
         } catch (Exception e) {
             return null;
