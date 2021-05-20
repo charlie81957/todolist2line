@@ -32,23 +32,11 @@ public class TodoRepositoryTest {
 
     @Test
     void Todoを全件取得できる() {
+
         List<Todo> result = todoRepo.findAll();
         for (Todo item : result) {
             System.out.println("検索結果：\t" + item);
         }
-    }
-
-    @Test
-    @Transactional
-    void Todoを一件追加できる() {
-
-        Todo testcase = new Todo();
-        testcase.setUserId("hoge");
-        testcase.setTodoTitle("買い物");
-        testcase.setDone(false);
-
-        System.out.println("追加するデータ：\t" + testcase);
-        System.out.println("追加されたデータ：\t" + todoRepo.save(testcase));
 
     }
 
@@ -78,6 +66,20 @@ public class TodoRepositoryTest {
 
     @Test
     @Transactional
+    void Todoを一件追加できる() {
+
+        Todo testcase = new Todo();
+        testcase.setUserId("hoge");
+        testcase.setTodoTitle("買い物");
+        testcase.setDone(false);
+
+        System.out.println("追加するデータ：\t" + testcase);
+        System.out.println("追加されたデータ：\t" + todoRepo.save(testcase));
+
+    }
+
+    @Test
+    @Transactional
     void Todoを一件更新できる() {
 
         Todo testcase = new Todo();
@@ -102,7 +104,7 @@ public class TodoRepositoryTest {
         try {
             todoRepo.findById(query).get();
         } catch (NoSuchElementException e) {
-            System.out.println("削除前データ：\t" + e.getClass().getName());
+            System.out.println("削除後データ：\t" + e.getClass().getName());
         }
     }
 
