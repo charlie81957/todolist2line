@@ -26,9 +26,11 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
-    public UserInfo findUserById(String id) {
+    public UserInfoDto findUserById(String id) {
         try {
-            return userRepo.findById(id).get();
+            UserInfoDto userInfoDto = new UserInfoDto();
+            BeanUtils.copyProperties(userRepo.findById(id).get(), userInfoDto);
+            return userInfoDto;
         } catch (NoSuchElementException e) {
             // 指定したIDが存在しなかった場合
             return null;
@@ -47,8 +49,8 @@ public class UserServiceImpl implements UserService {
             return false;
         }
 
-        String encryptionPassword = SHA256Utils.getSHA256(userInfoDto.getUserId() + userInfoDto.getUserPassword());
-        UserInfo userInfo = new UserInfo(userInfoDto.getUserId(), encryptionPassword);
+        String encryptedPassword = SHA256Utils.getSHA256(userInfoDto.getUserId() + userInfoDto.getUserPassword());
+        UserInfo userInfo = new UserInfo(userInfoDto.getUserId(), encryptedPassword);
 
         if (optionalUser.get().equals(userInfo)) {
             return true;
@@ -91,7 +93,7 @@ public class UserServiceImpl implements UserService {
             userRepo.save(user);
             return user.getUserId() + "was updated.";
         } catch (Exception e) {
-            return "System error happened.";
+            return e.getMessage();
         }
     }
 
@@ -105,9 +107,12 @@ public class UserServiceImpl implements UserService {
     public String deleteUser(String id) {
         try {
             userRepo.deleteById(id);
+            userRepo.findById(id);
             return id + "was deleted.";
+        } catch (NoSuchElementException e) {
+            return e.getClass().getName();
         } catch (Exception e) {
-            return "System error happened.";
+            return e.getMessage();
         }
     }
 

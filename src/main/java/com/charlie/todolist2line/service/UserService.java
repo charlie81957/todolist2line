@@ -9,7 +9,7 @@ public interface UserService {
 
     boolean isAbleToLogin(UserInfoDto userInfoDto);
 
-    UserInfo findUserById(String id);
+    UserInfoDto findUserById(String id);
 
     String updateUser(UserInfo user);
 
