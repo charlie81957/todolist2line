@@ -88,7 +88,14 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
-    public String updateUser(UserInfo user) {
+    public String updateUser(UserInfoDto userInfoDto) {
+        UserInfo user = new UserInfo();
+
+        BeanUtils.copyProperties(userInfoDto, user);
+
+        String encryptedPassword = SHA256Utils.getSHA256(userInfoDto.getUserId() + userInfoDto.getUserPassword());
+        user.setEncryptedPassword(encryptedPassword);
+
         try {
             userRepo.save(user);
             return user.getUserId() + "was updated.";
