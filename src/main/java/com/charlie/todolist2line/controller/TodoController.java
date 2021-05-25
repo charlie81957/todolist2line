@@ -18,12 +18,12 @@ public class TodoController {
 
     @ResponseBody
     @RequestMapping("/init")
-    public String Init(){
+    public String Init() {
         return "todo/init";
     }
-    
+
     @RequestMapping("/todo/{userId}")
-    public List<TodoDto> todoInit(@PathVariable("userId")String userId){
+    public List<TodoDto> todoInit(@PathVariable("userId") String userId) {
 
         List<TodoDto> todoDtoList = todoService.findTodoListByUserId(userId);
 
@@ -31,17 +31,17 @@ public class TodoController {
     }
 
     @RequestMapping("/todo/save")
-    public void save(@RequestParam String userId, @RequestParam TodoDto todoDto){
+    public void save(@RequestParam String userId, @RequestParam TodoDto todoDto) {
         todoService.saveTodo(userId, todoDto);
     }
 
     @RequestMapping("/todo/delete")
-    public void delete(@RequestParam String userId, @RequestParam int todoId){
+    public void delete(@RequestParam String userId, @RequestParam int todoId) {
         todoService.deleteTodo(userId, todoId);
     }
 
     @RequestMapping("/todos/delete")
-    public void deletes(@RequestParam String userId, @RequestParam int[] todoIds){
+    public void deletes(@RequestParam String userId, @RequestParam int[] todoIds) {
         todoService.deleteTodos(userId, todoIds);
     }
 
