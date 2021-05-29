@@ -52,8 +52,8 @@ public class UserController {
     }
 
     // 井村が作ったやつです。UserIdの存在確認用
-    @ResponseBody           
-    @RequestMapping(value="/isExist", method=RequestMethod.POST)
+    @ResponseBody
+    @RequestMapping(value = "/isExist", method = RequestMethod.POST)
     @CrossOrigin
     public boolean isExistUserId(@RequestParam String userId) {
         return userService.isExistUserId(userId);
