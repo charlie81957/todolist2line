@@ -1,0 +1,45 @@
+my todo
+
+きのはらさんのHTMLを見れるように、Bootstrap導入
+Redux環境
+それらのモジュールを入れる
+調査すること
+サーバーのたて方
+
+"connected-react-router": "^6.9.1",
+"history": "^4.10.1",
+"react": "^17.0.2",
+"react-dom": "^17.0.2",
+"react-redux": "^7.2.4",
+"react-router": "^5.2.0",
+"react-router-redux": "^4.0.8",
+"react-scripts": "4.0.3",
+"web-vitals": "^1.1.2"
+やりたいバージョン
+
+   "history": "^4.6.3",
+    "react": "^16.3.0",
+    "react-dom": "^16.3.0",
+    "react-redux": "^5.0.7",
+    "react-router": "^4.1.2",
+    "react-router-dom": "^5.2.0",
+    "react-router-redux": "^5.0.0-alpha.6",
+    "react-scripts": "4.0.3",
+    "redux": "^4.1.0",
+    "web-vitals": "^1.1.2"
+
+operatonsでAPIを叩いたら
+Access to fetch at 'http://localhost:8080/signIn' from origin 'http://localhost:3000' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. If an opaque response serves your needs, set the request's mode to 'no-cors' to fetch the resource with CORS disabled.
+というエラーが出てきた
+このエラーを解決
+POST通信を行う
+結果をActionに投げてStateのログイン部分を更新させる
+userInfoDtoがわからない
+いろいろ解決した
+ReducersからStateを変更する部分ができていない気がする
+
+autofocusのせいでOnBlurが画面に入ってきた時に動作していた
+今まではフラグで回避していたけど、AutoFocusを消せば、たぶん治る
+SignInはできた
+SignUpはUidの存在確認をしないと行けないので、実装できないわ
+入力されたUser ID（Password）が登録済みでないときをOnBlurでやるのはむりくないか？

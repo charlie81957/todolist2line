@@ -5,6 +5,7 @@ import com.charlie.todolist2line.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
+// @RestController
 public class UserController {
 
     @Autowired
@@ -49,5 +51,14 @@ public class UserController {
     @RequestMapping(value = "/logout")
     public String logout() {
         return this.loginInit();
+    }
+
+    // 井村が作ったやつです。UserIdの存在確認用
+    @ResponseBody
+    @RequestMapping(value = "/isExist", method = RequestMethod.POST)
+    @CrossOrigin
+    public boolean isExistUserId(@RequestBody String uid) {
+        // return userService.isAbelToLogin(userInfoDto);
+        return true; // EDIT!!!
     }
 }
