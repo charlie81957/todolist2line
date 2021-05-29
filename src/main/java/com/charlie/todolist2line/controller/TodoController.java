@@ -16,10 +16,11 @@ public class TodoController {
 
     private TodoService todoService;
 
-    @ResponseBody
+    // @ResponseBody
     @RequestMapping("/init")
     public String Init() {
-        return "todo/init";
+        // return "todo/init";
+        return "todo";
     }
 
     @RequestMapping("/todo/{userId}")

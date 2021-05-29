@@ -9,14 +9,9 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-<<<<<<< HEAD
-// @CrossOrigin // Edited by imura 2021-0523--https://spring.io/blog/2015/06/08/cors-support-in-spring-framework
-=======
->>>>>>> 95f46487ba8c7917b95f6360c603e45cda16199a
 @Controller
 // @RestController
 public class UserController {
@@ -47,8 +42,10 @@ public class UserController {
      */
     @ResponseBody
     @RequestMapping(value = "/signIn", method = RequestMethod.POST)
-    public boolean SignIn(@RequestParam UserInfoDto userInfoDto) {
-        return userService.isAbleToLogin(userInfoDto);
+    public boolean SignIn(@RequestBody UserInfoDto userInfoDto) {
+        System.out.println(userInfoDto);
+        // return userService.isAbleToLogin(userInfoDto);
+        return true;
     }
 
     @RequestMapping(value = "/logout")
@@ -57,8 +54,8 @@ public class UserController {
     }
 
     // 井村が作ったやつです。UserIdの存在確認用
-    @ResponseBody           
-    @RequestMapping(value="/isExist", method=RequestMethod.POST)
+    @ResponseBody
+    @RequestMapping(value = "/isExist", method = RequestMethod.POST)
     @CrossOrigin
     public boolean isExistUserId(@RequestBody String uid) {
         // return userService.isAbelToLogin(userInfoDto);
