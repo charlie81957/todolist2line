@@ -13,27 +13,31 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+<<<<<<< HEAD
 // @CrossOrigin // Edited by imura 2021-0523--https://spring.io/blog/2015/06/08/cors-support-in-spring-framework
+=======
+>>>>>>> 95f46487ba8c7917b95f6360c603e45cda16199a
 @Controller
 // @RestController
 public class UserController {
-    
+
     @Autowired
     private UserService userService;
 
     @RequestMapping(value = "/loginInit")
-    public String loginInit(){
+    public String loginInit() {
         return "login";
     }
 
     /**
      * ユーザ作成
+     * 
      * @param userId
      * @param userPassword
      */
     @ResponseBody
     @RequestMapping(value = "/signUp")
-    public String signUp(@RequestParam UserInfoDto userInfoDto){
+    public String signUp(@RequestParam UserInfoDto userInfoDto) {
         return userService.createUser(userInfoDto);
     }
 
@@ -41,16 +45,14 @@ public class UserController {
      * 
      * @param userInfoDto
      */
-    @ResponseBody           
-    @RequestMapping(value="/signIn", method=RequestMethod.POST)
-    @CrossOrigin
-    public boolean SignIn(@RequestBody UserInfoDto userInfoDto) {
-        // return userService.isAbelToLogin(userInfoDto);
-        return true; // EDIT!!!
+    @ResponseBody
+    @RequestMapping(value = "/signIn", method = RequestMethod.POST)
+    public boolean SignIn(@RequestParam UserInfoDto userInfoDto) {
+        return userService.isAbleToLogin(userInfoDto);
     }
-    
-    @RequestMapping(value = "/loguot")
-    public String logout(){
+
+    @RequestMapping(value = "/logout")
+    public String logout() {
         return this.loginInit();
     }
 
