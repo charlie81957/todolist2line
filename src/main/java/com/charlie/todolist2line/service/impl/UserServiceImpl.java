@@ -116,4 +116,14 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    public boolean isExistUserId(String userId) {
+        Optional<UserInfo> optionalUser = userRepo.findById(userId);
+        if (optionalUser.isPresent()) {
+            return false;
+        }else{
+            return true;
+        }
+    }
+
 }

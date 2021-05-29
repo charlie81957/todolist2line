@@ -9,6 +9,8 @@ public interface UserService {
 
     boolean isAbleToLogin(UserInfoDto userInfoDto);
 
+    boolean isExistUserId(String userId);
+
     UserInfoDto findUserById(String id);
 
     String updateUser(UserInfo user);
