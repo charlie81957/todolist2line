@@ -5,6 +5,7 @@ import com.charlie.todolist2line.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -39,8 +40,10 @@ public class UserController {
      */
     @ResponseBody
     @RequestMapping(value = "/signIn", method = RequestMethod.POST)
-    public boolean SignIn(@RequestParam UserInfoDto userInfoDto) {
-        return userService.isAbleToLogin(userInfoDto);
+    public boolean SignIn(@RequestBody UserInfoDto userInfoDto) {
+        System.out.println(userInfoDto);
+        // return userService.isAbleToLogin(userInfoDto);
+        return true;
     }
 
     @RequestMapping(value = "/logout")

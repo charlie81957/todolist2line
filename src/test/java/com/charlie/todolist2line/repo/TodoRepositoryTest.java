@@ -106,6 +106,7 @@ public class TodoRepositoryTest {
         } catch (NoSuchElementException e) {
             System.out.println("削除後データ：\t" + e.getClass().getName());
         }
+
     }
 
     @Test
