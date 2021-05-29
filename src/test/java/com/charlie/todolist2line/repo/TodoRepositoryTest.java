@@ -106,6 +106,19 @@ public class TodoRepositoryTest {
         } catch (NoSuchElementException e) {
             System.out.println("削除後データ：\t" + e.getClass().getName());
         }
+
+    }
+
+    @Test
+    @Transactional
+    void 指定のユーザーのTodoを削除できる() {
+
+        String query = "hoge";
+
+        System.out.println("削除前データ：\t" + todoRepo.findByUserId(query).size() + "件");
+        todoRepo.deleteByUserId(query);
+        System.out.println("削除後データ：\t" + todoRepo.findByUserId(query).size() + "件");
+
     }
 
 }
