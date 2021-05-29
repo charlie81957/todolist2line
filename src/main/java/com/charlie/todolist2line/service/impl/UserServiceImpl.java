@@ -29,11 +29,15 @@ public class UserServiceImpl implements UserService {
     public UserInfoDto findUserById(String id) {
         try {
             UserInfoDto userInfoDto = new UserInfoDto();
-            BeanUtils.copyProperties(userRepo.findById(id).get(), userInfoDto);
+            Optional<UserInfo> optionalUser = userRepo.findById(id);
+            if(!optionalUser.isPresent()){
+                return null;
+            }
+            
+            BeanUtils.copyProperties(optionalUser.get(), userInfoDto);
+            userInfoDto.setUserPassword(optionalUser.get().getEncryptedPassword());
+            
             return userInfoDto;
-        } catch (NoSuchElementException e) {
-            // 指定したIDが存在しなかった場合
-            return null;
         } catch (Exception e) {
             return null;
         }
@@ -89,6 +93,12 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public String updateUser(UserInfoDto userInfoDto) {
+        //DBにユーザーが存在するかを確認
+        Optional<UserInfo> optionalUser = userRepo.findById(userInfoDto.getUserId());
+        if (!optionalUser.isPresent()) {
+            return "noExsistUser";
+        }
+
         UserInfo user = new UserInfo();
 
         BeanUtils.copyProperties(userInfoDto, user);
@@ -112,6 +122,12 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public String deleteUser(String id) {
+        //DBにユーザーが存在するかを確認
+        Optional<UserInfo> optionalUser = userRepo.findById(id);
+        if (!optionalUser.isPresent()) {
+            return "noExsistUser";
+        }
+        
         try {
             userRepo.deleteById(id);
             userRepo.findById(id);
@@ -127,9 +143,9 @@ public class UserServiceImpl implements UserService {
     public boolean isExistUserId(String userId) {
         Optional<UserInfo> optionalUser = userRepo.findById(userId);
         if (optionalUser.isPresent()) {
-            return false;
-        }else{
             return true;
+        }else{
+            return false;
         }
     }
 

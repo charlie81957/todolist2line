@@ -5,9 +5,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import javax.transaction.Transactional;
 
 import com.charlie.todolist2line.dto.UserInfoDto;
-import com.charlie.todolist2line.model.UserInfo;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -17,27 +19,40 @@ public class UserServiceTest {
     @Autowired
     UserService userService;
 
+    // テストに用いるユーザーデータの作成
+    UserInfoDto testUser = new UserInfoDto("testUser","testPass");
+  
+    @BeforeEach
+    void showStartMsg(TestInfo testInfo) {
+        System.out.println(">-----" + testInfo.getTestMethod().get().getName() + " START-----<");
+    }
+
+    @AfterEach
+    void showEndMsg(TestInfo testInfo) {
+        System.out.println(">-----" + testInfo.getTestMethod().get().getName() + " END-----<");
+    }
+
+
     @Test
     @Transactional
     void ユーザーを新規登録できる() {
 
-        // テストに用いるユーザーデータの作成
-        UserInfoDto user = new UserInfoDto();
-        user.setUserId("testuser3");
-        user.setUserPassword("foobar");
+        String actual = userService.createUser(testUser);
 
-        String actual = userService.createUser(user);
+        System.out.println(userService.findUserById(testUser.getUserId()));
 
         assertEquals("success", actual);
     }
 
+
     @Test
+    @Transactional
     void ログインに成功する(){
 
         //テストに用いるユーザーデータの作成
-        UserInfoDto user = new UserInfoDto();
-        user.setUserId("testUser");
-        user.setUserPassword("testPass");
+        UserInfoDto user = new UserInfoDto("test","testPass");
+
+        userService.createUser(user);
 
         boolean actual = userService.isAbleToLogin(user); 
 
@@ -45,20 +60,38 @@ public class UserServiceTest {
     }
 
     @Test
-    void ログインに失敗する(){
+    @Transactional
+    void ログインに失敗する_userIdのみ違う場合(){
 
-        //テストに用いるユーザーデータの作成
-        UserInfoDto user = new UserInfoDto();
-        user.setUserId("testUser");
-        user.setUserPassword("testPassHoge");
+        //テスト用ユーザーを挿入
+        userService.createUser(testUser);
 
-        boolean actual = userService.isAbleToLogin(user); 
+        //テストに用いるユーザーデータの生成2
+        UserInfoDto user2 = new UserInfoDto("testUser2","testPass");
+        boolean actual = userService.isAbleToLogin(user2); 
+
+        assertEquals(false, actual);
+    }
+    @Test
+    @Transactional
+    void ログインに失敗する_passworddのみ違う場合(){
+
+        //テスト用ユーザーを挿入
+        userService.createUser(testUser);
+
+        //テストに用いるユーザーデータの生成2
+        UserInfoDto user2 = new UserInfoDto("testU","testPass2");
+        boolean actual = userService.isAbleToLogin(user2); 
 
         assertEquals(false, actual);
     }
 
     @Test
+    @Transactional
     void ユーザーを一件検索できる(){
+        //テストユーザーを挿入
+        userService.createUser(testUser);
+
         //テスト用に用いるユーザーIDを生成
         String userId = "testUser";
 
@@ -72,25 +105,26 @@ public class UserServiceTest {
     @Test
     @Transactional
     void ユーザーを更新できる(){
-        // テストに用いるユーザーデータの作成
-        UserInfoDto user = new UserInfoDto();
-        user.setUserId("testUser");
-        user.setUserPassword("userPass");
+        //テストユーザーを挿入
+        userService.createUser(testUser);
 
-        String actual = userService.updateUser(user);
+        testUser.setUserPassword("testPass2");
 
-        assertEquals("success", actual);
+        String actual = userService.updateUser(testUser);
+
+        System.out.println(userService.findUserById("testUser"));
+
+        assertEquals(testUser.getUserId() + "was updated.", actual);
     }
 
     @Test
     @Transactional
     void ユーザーを削除できる(){
-        // テストに用いるユーザーデータの作成
-        String userId = "testUser";
+        userService.createUser(testUser);
 
-        String actual = userService.deleteUser(userId);
+        String actual = userService.deleteUser(testUser.getUserId());
 
-        assertEquals("success", actual);
+        assertEquals(testUser.getUserId() + "was deleted.", actual);
     }
 
 
