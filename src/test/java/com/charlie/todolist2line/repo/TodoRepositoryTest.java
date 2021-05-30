@@ -1,5 +1,6 @@
 package com.charlie.todolist2line.repo;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -69,8 +70,11 @@ public class TodoRepositoryTest {
     void Todoを一件追加できる() {
 
         Todo testcase = new Todo();
-        testcase.setUserId("hoge");
+        testcase.setUserId("hoge2");
         testcase.setTodoTitle("買い物");
+        testcase.setTodoContent("買い物をする");
+        Timestamp limitDateTime = new Timestamp(System.currentTimeMillis());
+        testcase.setLimitDateTime(limitDateTime);
         testcase.setDone(false);
 
         System.out.println("追加するデータ：\t" + testcase);

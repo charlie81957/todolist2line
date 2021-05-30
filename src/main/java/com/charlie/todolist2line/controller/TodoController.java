@@ -7,6 +7,7 @@ import com.charlie.todolist2line.service.TodoService;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -31,18 +32,18 @@ public class TodoController {
     }
 
     @RequestMapping("/todo/save")
-    public void save(@RequestParam String userId, @RequestParam TodoDto todoDto) {
-        todoService.saveTodo(userId, todoDto);
+    public void save(@RequestBody TodoDto todoDto) {
+        todoService.saveTodo(todoDto);
     }
 
     @RequestMapping("/todo/delete")
-    public void delete(@RequestParam String userId, @RequestParam int todoId) {
-        todoService.deleteTodo(userId, todoId);
+    public void delete(@RequestParam int todoId) {
+        todoService.deleteTodo(todoId);
     }
 
     @RequestMapping("/todos/delete")
-    public void deletes(@RequestParam String userId, @RequestParam int[] todoIds) {
-        todoService.deleteTodos(userId, todoIds);
+    public void deletes(@RequestParam String userId) {
+        todoService.deleteByUserId(userId);
     }
 
 }

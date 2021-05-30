@@ -17,7 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class UserServiceTest {
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     // テストに用いるユーザーデータの作成
     UserInfoDto testUser = new UserInfoDto("testUser","testPass");

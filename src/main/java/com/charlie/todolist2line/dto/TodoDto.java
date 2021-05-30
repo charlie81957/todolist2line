@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TodoDto{
-    private String usreId;
+    private String userId;
     private int todoId;
     private String todoTitle;
     private String todoContent;
