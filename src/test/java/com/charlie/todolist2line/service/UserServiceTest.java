@@ -44,17 +44,30 @@ public class UserServiceTest {
         assertEquals("success", actual);
     }
 
+    @Test
+    void ユーザーの存在を確認できる(){
+        userService.createUser(testUser);
+
+        boolean actual = userService.isExistUserId(testUser.getUserId());
+
+        assertEquals(true, actual);
+    }
+    @Test
+    void ユーザーの存在を確認できる2(){
+        userService.createUser(testUser);
+
+        boolean actual = userService.isExistUserId("notExist");
+
+        assertEquals(false, actual);
+    }
 
     @Test
     @Transactional
     void ログインに成功する(){
 
-        //テストに用いるユーザーデータの作成
-        UserInfoDto user = new UserInfoDto("test","testPass");
+        userService.createUser(testUser);
 
-        userService.createUser(user);
-
-        boolean actual = userService.isAbleToLogin(user); 
+        boolean actual = userService.isAbleToLogin(testUser); 
 
         assertEquals(true, actual);
     }
