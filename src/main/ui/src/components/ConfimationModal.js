@@ -2,9 +2,12 @@ import React from 'react';
 import Modal from 'react-modal';
 
 const ConfirmationModal = (props) => {
-    console.dir(props.modalFlag)
+    console.dir()
+    var modalFlagInConf = props.modalFlag
     return (
-        <Modal isOpen={props.modalFlag}>
+        <Modal isOpen={modalFlagInConf}
+          ariaHideApp={false}
+        >
         <button>Close Modal</button>
       </Modal>
     )

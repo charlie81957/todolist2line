@@ -1,5 +1,5 @@
 import { routerActions } from 'connected-react-router';
-import {SIGN_IN, SIGN_OUT, VALID_UID, VALID_PW} from './constants';
+import {SIGN_IN, SIGN_OUT, VALID_UID, VALID_PW, EXIST_UID} from './constants';
 
 export const signInAction = (userState) => {
     return {
@@ -38,6 +38,17 @@ export const validatePwAction = (message, isValid) => {
         payload: {
             validatePwMessage: message,
             isValidatePw: isValid
+        }
+    }
+} 
+
+export const isExistUidAction = (message, isExist, isValid) => {
+    return {
+        type: EXIST_UID,
+        payload: {
+            validateUidMessage: message,
+            isExist: isExist,
+            isValidateUid: isValid
         }
     }
 } 

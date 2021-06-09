@@ -3,8 +3,9 @@ import { useState, useCallback} from 'react';
 import { connect } from 'react-redux';
 import {useDispatch, useSelector} from 'react-redux';
 import { signInAction, validatePwAction } from '../actions/actions';
-import {signIn, validateUid, validatePassword} from '../operation';
-import ConfimationModal from './ConfimationModal';
+import {signIn, validateUid, validatePassword, signUp, isExistUid} from '../operation';
+// import ConfimationModal from './ConfimationModal';
+import Modal from 'react-modal';
 
 const LoginForm = () => {
 
@@ -26,18 +27,12 @@ const LoginForm = () => {
     const infoUser = useSelector(state => state.users)
     
     // 1回目にOnBlurが動くことを回避するフラグ
-    var onBlurFlag = false;
     var message1 = undefined;
     const inputUid = useCallback((e) => {
-        if (!onBlurFlag) {
-            onBlurFlag = true
-            return
-        }
         setUid(e.target.value)
         // message1 = dispatch(validateUid(e.target.value))
         // 値検証の結果をStoreに保存
         dispatch(validateUid(e.target.value))
-        console.log(infoUser)
 
     },[]);
 
@@ -58,6 +53,23 @@ const LoginForm = () => {
 
     // Modal flag
     const [showModal, setShowModal] = useState(false);
+
+    // modal style
+    const modalStyle = {
+        overlar: {
+            position: "fixed",
+            top: 0,
+            left: 0
+        },
+        content: {
+            position: "absolute",
+            width: "200px",
+            height: "200px",
+            marginLeft: "auto",
+            marginRight: "auto",
+            marginTop: "2rem"
+        }
+    }
 
     /**
      * LoginForm Component
@@ -113,7 +125,7 @@ const LoginForm = () => {
                     type="button"
                     id="signIn"
                     className="btn btn-outline-primary"
-                    disabled={!(infoUser.isValidateUid === true && infoUser.isValidatePw === true)}
+                    disabled={!(infoUser.isValidateUid && infoUser.isValidatePw && !infoUser.isExist)}
                     onClick={() => dispatch(signIn(uid, password))}
                 >
                     Sign in
@@ -122,14 +134,26 @@ const LoginForm = () => {
                     type="button"
                     id="signUp"
                     className="btn btn-outline-primary"
-                    // disabled
+                    disabled={!(infoUser.isValidateUid && infoUser.isValidatePw && infoUser.isExist)}
+                    // disabled={true}
                     onClick={() => setShowModal(true)}
                 >
                     Sign up
                 </button>
             </div>
         </form>
-        <ConfimationModal modalFlag={showModal}/>
+        
+        {/* Push SignUp Method  */}
+        <Modal isOpen={showModal}
+          ariaHideApp={false}
+          style={modalStyle}
+        >
+            <h5>新規登録</h5>
+            <p>入力されたID.Passwordでユーザー登録を行いますよろしいですか？</p>
+            
+        <button style={{display: 'inline-block'}} className="btn btn-primary" onClick={() => dispatch(signUp(uid, password))}>登録</button>
+        <button style={{display: 'inline-block'}} className="btn btn-danger" onClick={() => setShowModal(false)}>キャンセル</button>
+      </Modal>
     </div>
     );
 }

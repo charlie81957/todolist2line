@@ -1,4 +1,4 @@
-import { SIGN_IN, SIGN_OUT, VALID_UID, VALID_PW } from '../actions/constants';
+import { SIGN_IN, SIGN_OUT, VALID_UID, VALID_PW, EXIST_UID } from '../actions/constants';
 
 export default( state = {
     isSignIn: false,
@@ -7,6 +7,7 @@ export default( state = {
     validatePwMessage: "",
     isValidateUid: false,
     isValidatePw: false,
+    isExist: false,
 }, action) => {
     switch(action.type) {
         case SIGN_IN:
@@ -27,6 +28,11 @@ export default( state = {
                 ...action.payload
             }
         case VALID_PW:
+            return {
+                ...state,
+                ...action.payload
+            }
+        case EXIST_UID:
             return {
                 ...state,
                 ...action.payload
