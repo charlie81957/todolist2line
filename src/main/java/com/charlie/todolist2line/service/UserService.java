@@ -1,7 +1,6 @@
 package com.charlie.todolist2line.service;
 
 import com.charlie.todolist2line.dto.UserInfoDto;
-import com.charlie.todolist2line.model.UserInfo;
 
 public interface UserService {
 
@@ -13,7 +12,7 @@ public interface UserService {
 
     UserInfoDto findUserById(String id);
 
-    String updateUser(UserInfo user);
+    String updateUser(UserInfoDto  userInfoDto);
 
     String deleteUser(String id);
 }

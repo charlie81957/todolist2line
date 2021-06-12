@@ -5,11 +5,16 @@ import java.util.List;
 import com.charlie.todolist2line.dto.TodoDto;
 
 public interface TodoService {
+    List<TodoDto> findAll();
+
     List<TodoDto>  findTodoListByUserId(String userId);
 
-    void saveTodo(String userId, TodoDto todoDto);
+    TodoDto findTodoDtoById(int todoId);
 
-    void deleteTodo(String userId, int todoId);
+    void saveTodo(TodoDto todoDto);
 
-    void deleteTodos(String userId, int[] todoIds);//totoをまとめて削除する場合 一応作成
+    void deleteTodo(int todoId);
+
+    void deleteByUserId(String userId);
+
 }
