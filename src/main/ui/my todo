@@ -43,3 +43,15 @@ autofocusのせいでOnBlurが画面に入ってきた時に動作していた
 SignInはできた
 SignUpはUidの存在確認をしないと行けないので、実装できないわ
 入力されたUser ID（Password）が登録済みでないときをOnBlurでやるのはむりくないか？
+
+operations.jsをReducerとかみたいに分ければよかた。。
+Operationsフォルダをつくる今度
+
+SignUpへのAjaxまでできた
+あとはサーバー側のコードをPullして
+Postmanで試した後、クライアント側で試してみる
+
+メッセージ表示部分が動かなくなった
+
+
+isExistは動いたけど、SignInFlagが立たなくなった

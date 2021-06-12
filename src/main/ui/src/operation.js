@@ -185,6 +185,33 @@ export const signUp = (uid, pw) => {
                 })
             .catch(() => null)
     }
+}
 
+
+export const createTodo = (title, detail, limit, notice) => {
+
+    
+
+    // When we regist todo, check valition 
+    const validateFlag = false;
+
+
+    return async (dispatch, getState) => {
+        const state = getState()
+        const url = "http://localhost:8080/isExist"
+
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            mode: 'cors',
+            credentials: 'same-origin',
+            body: JSON.stringify({ 
+                userId: "uid"
+            })
+        };
+        // Return Main Todo screen!!
+        dispatch(push('/'));
+
+    }
 }
 
