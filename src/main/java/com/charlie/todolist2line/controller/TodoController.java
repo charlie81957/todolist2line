@@ -5,6 +5,7 @@ import java.util.List;
 import com.charlie.todolist2line.dto.TodoDto;
 import com.charlie.todolist2line.service.TodoService;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class TodoController {
 
+    @Autowired
     private TodoService todoService;
 
     // @ResponseBody
@@ -23,8 +25,8 @@ public class TodoController {
         return "todo";
     }
 
-    @RequestMapping("/todo/{userId}")
-    public List<TodoDto> todoInit(@PathVariable("userId") String userId) {
+    @RequestMapping("/todo/show")
+    public List<TodoDto> todoInit(String userId) {
 
         List<TodoDto> todoDtoList = todoService.findTodoListByUserId(userId);
 
