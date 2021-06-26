@@ -1,5 +1,6 @@
-import {signInAction, validateUidAction, validatePwAction, isExistUidAction} from './actions/actions';
+import {signInAction, validateUidAction, validatePwAction, isExistUidAction, fetchTodoListAction } from './actions/actions';
 import {push} from 'connected-react-router';
+import {useDispatch, useSelector} from 'react-redux';
 
 export const validateUid = (uid) => {
     var mess = "";
@@ -33,6 +34,7 @@ export const validateUid = (uid) => {
                 .then(res => res.json())
                 .then(resJson => 
                     {
+                        resJson = true
                         // return resJson;
                         if (!resJson) {
                             // SignUp
@@ -187,18 +189,33 @@ export const signUp = (uid, pw) => {
     }
 }
 
+const modifyTimestampFormat = (time) => {
 
+}
 export const createTodo = (title, detail, limit, notice) => {
-
-    
-
-    // When we regist todo, check valition 
-    const validateFlag = false;
-
-
     return async (dispatch, getState) => {
-        const state = getState()
-        const url = "http://localhost:8080/isExist"
+
+        // When we regist todo, check valition 
+        const validateFlag = false;
+        if (title.length < 3) {
+            alert("3文字以上で入力してください");
+            return false;
+        }
+        if (limit.length < 1) {
+            alert("期限を入力してください");
+            return false;
+        }
+        if (notice.length < 1) {
+            alert("通知を入力してください");
+            return false;
+        }
+
+        const url = "http://localhost:8080/todo/save"
+        // const infoUser = useSelector(state => state.users)
+        // console.log(limit)
+        var formattedLimit = limit + ".000";
+        // console.log(formattedLimit)
+        
 
         const requestOptions = {
             method: 'POST',
@@ -206,12 +223,92 @@ export const createTodo = (title, detail, limit, notice) => {
             mode: 'cors',
             credentials: 'same-origin',
             body: JSON.stringify({ 
-                userId: "uid"
+                userId: "test",
+                todoTitle: title,
+                todoContent: detail,
+                limitDateTime: formattedLimit,
             })
         };
-        // Return Main Todo screen!!
-        dispatch(push('/'));
-
+        const response = await fetch(url, requestOptions).then(res => {
+            console.log("we get response");
+            console.log(res);
+            dispatch(push('/'));
+        })
+        .catch(() => console.log("sippai"))                   
     }
 }
 
+export const fetchTodoList = (userId) => {
+    return async (dispatch, getState) => {
+        const url = "http://localhost:8080/todo/show?userId=" + userId
+        // const infoUser = useSelector(state => state.users)
+        // console.dir(infoUser)
+
+        const requestOptions = {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+            mode: 'cors',
+            credentials: 'same-origin',
+        };
+        const response = await fetch(url, requestOptions)
+        .then(res => res.json())
+        .then(resJson => 
+            {
+                dispatch(fetchTodoListAction({
+                    todoList: resJson
+                }));
+                // dispatch(push('/'));
+            })
+        .catch(() => null)  
+    }
+}
+
+export const deleteTodo = (todoId) => {
+    return async (dispatch, getState) => {
+        const url = "http://localhost:8080/todo/delete?todoId=" + todoId
+        // const infoUser = useSelector(state => state.users)
+        // console.dir(infoUser)
+
+        const requestOptions = {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+            mode: 'cors',
+            credentials: 'same-origin',
+        };
+        const response = await fetch(url, requestOptions)
+        .then(res => res.json())
+        .then(resJson => 
+            {
+                // dispatch(fetchTodoListAction({
+                //     todoList: resJson
+                // }));
+                dispatch(push('/'));
+            })
+        .catch(() => null)  
+    }
+}
+
+export const editTodo = (todoId) => {
+    return async (dispatch, getState) => {
+        const url = "http://localhost:8080/todo/delete?todoId=" + todoId
+        // const infoUser = useSelector(state => state.users)
+        // console.dir(infoUser)
+
+        const requestOptions = {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+            mode: 'cors',
+            credentials: 'same-origin',
+        };
+        const response = await fetch(url, requestOptions)
+        .then(res => res.json())
+        .then(resJson => 
+            {
+                // dispatch(fetchTodoListAction({
+                //     todoList: resJson
+                // }));
+                dispatch(push('/'));
+            })
+        .catch(() => null)  
+    }
+}

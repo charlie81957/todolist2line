@@ -63,6 +63,7 @@ public class TodoServiseImpl implements TodoService{
 
     @Override
     public void saveTodo(TodoDto todoDto) {
+        System.out.println(todoDto.getLimitDateTime());
         Todo todo = new Todo();
 
         BeanUtils.copyProperties(todoDto, todo);
