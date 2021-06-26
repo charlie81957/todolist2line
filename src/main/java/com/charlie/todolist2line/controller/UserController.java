@@ -42,6 +42,7 @@ public class UserController {
      */
     @ResponseBody
     @RequestMapping(value = "/signIn", method = RequestMethod.POST)
+    @CrossOrigin
     public boolean SignIn(@RequestBody UserInfoDto userInfoDto) {
         return userService.isAbleToLogin(userInfoDto);
     }
@@ -55,7 +56,8 @@ public class UserController {
     @ResponseBody
     @RequestMapping(value = "/isExist", method = RequestMethod.POST)
     @CrossOrigin
-    public boolean isExistUserId(@RequestParam String userId) {
+    public boolean isExistUserId(@RequestBody String userId) {
         return userService.isExistUserId(userId);
+        // return true;
     }
 }
