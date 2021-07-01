@@ -44,6 +44,8 @@ public class TodoController {
     @ResponseBody
     @CrossOrigin
     public void save(@RequestBody TodoDto todoDto) {
+        System.out.println("hellossave");
+        System.out.println(todoDto.getTodoId());
         todoService.saveTodo(todoDto);
     }
 

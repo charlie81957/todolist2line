@@ -1,4 +1,4 @@
-import {signInAction, validateUidAction, validatePwAction, isExistUidAction, fetchTodoListAction } from './actions/actions';
+import {signInAction, validateUidAction, validatePwAction, isExistUidAction, fetchTodoListAction, deleteTodoAction, createTodoAction } from './actions/actions';
 import {push} from 'connected-react-router';
 import {useDispatch, useSelector} from 'react-redux';
 
@@ -34,7 +34,7 @@ export const validateUid = (uid) => {
                 .then(res => res.json())
                 .then(resJson => 
                     {
-                        resJson = true
+                        // resJson = true
                         // return resJson;
                         if (!resJson) {
                             // SignUp
@@ -140,15 +140,19 @@ export const signIn = (uid, password) => {
                 .then(res => res.json())
                 .then(resJson => 
                     {
-                        if (!resJson) {
+                        if (resJson) {
                             // ここにはサインインが失敗した時の処理
+                            dispatch(signInAction({
+                                uid: uid,
+                                isSignIn: true
+                            }));
+                            // Return Main Todo screen!!
+                            sessionStorage.setItem('token', JSON.stringify(uid))
+                            dispatch(push('/'));
                         }
-                        dispatch(signInAction({
-                            uid: uid,
-                            isSignIn: true
-                        }));
-                        // Return Main Todo screen!!
-                        dispatch(push('/'));
+                        else {
+                            dispatch(validatePwAction("Passwordが異なります", resJson))
+                        }
                     })
                 .catch(() => null)                   
         }
@@ -172,31 +176,29 @@ export const signUp = (uid, pw) => {
 
         // https://stackoverflow.com/questions/48562406/trouble-with-fetch-in-react-with-cors
         const response = await fetch(url, requestOptions)
-            .then(res => res.json())
-            .then(resJson => 
+            .then(res => res.text())
+            .then(resStr => 
                 {
-                    if (!resJson) {
-                        // ここにはサインインが失敗した時の処理
+                    if (resStr == "success") {
+                            // ここにはサインインが失敗した時の処理
+                        
+                        dispatch(isExistUid({
+                            uid: uid,
+                            isSignIn: true
+                        }));
+                        sessionStorage.setItem('token', JSON.stringify(uid))
+                        // Return Main Todo screen!!
+                        dispatch(push('/'));
                     }
-                    dispatch(isExistUid({
-                        uid: uid,
-                        isSignIn: true
-                    }));
-                    // Return Main Todo screen!!
-                    dispatch(push('/'));
                 })
             .catch(() => null)
     }
 }
 
-const modifyTimestampFormat = (time) => {
-
-}
 export const createTodo = (title, detail, limit, notice) => {
     return async (dispatch, getState) => {
 
         // When we regist todo, check valition 
-        const validateFlag = false;
         if (title.length < 3) {
             alert("3文字以上で入力してください");
             return false;
@@ -213,28 +215,34 @@ export const createTodo = (title, detail, limit, notice) => {
         const url = "http://localhost:8080/todo/save"
         // const infoUser = useSelector(state => state.users)
         // console.log(limit)
-        var formattedLimit = limit + ".000";
+        var formattedLimit = limit + ".000+09:00";
         // console.log(formattedLimit)
         
-
+        const tokenString = sessionStorage.getItem('token')
+        const userToken = JSON.parse(tokenString)
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             mode: 'cors',
             credentials: 'same-origin',
             body: JSON.stringify({ 
-                userId: "test",
+                userId: userToken,
                 todoTitle: title,
                 todoContent: detail,
-                limitDateTime: formattedLimit,
+                limitDateTime: limit,
             })
         };
-        const response = await fetch(url, requestOptions).then(res => {
-            console.log("we get response");
-            console.log(res);
-            dispatch(push('/'));
-        })
-        .catch(() => console.log("sippai"))                   
+        try {
+            dispatch(createTodoAction())
+            await fetch(url, requestOptions)
+            
+        } catch (e) {
+            console.error(e)
+        }
+        // const response = await fetch(url, requestOptions).then(() => {
+        //     dispatch(createTodoAction())
+        // })
+        // .catch(() => console.log("sippai"))                 
     }
 }
 
@@ -250,6 +258,7 @@ export const fetchTodoList = (userId) => {
             mode: 'cors',
             credentials: 'same-origin',
         };
+        
         const response = await fetch(url, requestOptions)
         .then(res => res.json())
         .then(resJson => 
@@ -275,40 +284,128 @@ export const deleteTodo = (todoId) => {
             mode: 'cors',
             credentials: 'same-origin',
         };
+        const tokenString = sessionStorage.getItem('token')
+        const userToken = JSON.parse(tokenString)
+        
         const response = await fetch(url, requestOptions)
-        .then(res => res.json())
-        .then(resJson => 
-            {
-                // dispatch(fetchTodoListAction({
-                //     todoList: resJson
-                // }));
-                dispatch(push('/'));
-            })
+        .then(() => 
+        dispatch(fetchTodoList(userToken))
+        
+        )
         .catch(() => null)  
     }
 }
 
-export const editTodo = (todoId) => {
+export const editTodo = (todoId, title, detail, limit, notice) => {
     return async (dispatch, getState) => {
-        const url = "http://localhost:8080/todo/delete?todoId=" + todoId
+
+        // When we regist todo, check valition 
+        const validateFlag = false;
+        if (title.length < 3) {
+            alert("3文字以上で入力してください");
+            return false;
+        }
+        if (limit.length < 1) {
+            alert("期限を入力してください");
+            return false;
+        }
+        if (notice.length < 1) {
+            alert("通知を入力してください");
+            return false;
+        }
+
+        const url = "http://localhost:8080/todo/save"
         // const infoUser = useSelector(state => state.users)
-        // console.dir(infoUser)
+        // console.log(limit)
+        var formattedLimit = limit + ".000+09:00";
+        // console.log(formattedLimit)
+        const tokenString = sessionStorage.getItem('token')
+        const userToken = JSON.parse(tokenString)
+        
 
         const requestOptions = {
-            method: 'GET',
+            method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             mode: 'cors',
             credentials: 'same-origin',
+            body: JSON.stringify({ 
+                userId: userToken,
+                todoTitle: title,
+                todoContent: detail,
+                limitDateTime: limit,
+                todoId: todoId
+            })
+        };
+        
+        const response = await fetch(url, requestOptions).then(() => {
+            dispatch(push('/'));
+        })
+        .catch(() => console.log("sippai"))                   
+    }
+}
+
+export const completedTodoOperation = (todoId, title, detail, limit, notice) => {
+    return async (dispatch, getState) => {
+        const url = "http://localhost:8080/todo/save"
+        // const infoUser = useSelector(state => state.users)
+        // console.log(limit)
+        // var formattedLimit = limit + ".000+09:00";
+        // console.log(formattedLimit)
+        const tokenString = sessionStorage.getItem('token')
+        const userToken = JSON.parse(tokenString)
+        
+
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            mode: 'cors',
+            credentials: 'same-origin',
+            body: JSON.stringify({ 
+                userId: userToken,
+                todoTitle: title,
+                todoContent: detail,
+                limitDateTime: limit,
+                todoId: todoId,
+                done: true
+            })
         };
         const response = await fetch(url, requestOptions)
-        .then(res => res.json())
-        .then(resJson => 
-            {
-                // dispatch(fetchTodoListAction({
-                //     todoList: resJson
-                // }));
-                dispatch(push('/'));
+        .then(() => {
+            dispatch(push('/'));
+        })
+        .catch(() => console.log("sippai"))                   
+    }
+}
+
+export const notCompletedTodoOperation = (todoId, title, detail, limit, notice) => {
+    return async (dispatch, getState) => {
+        const url = "http://localhost:8080/todo/save"
+        // const infoUser = useSelector(state => state.users)
+        // console.log(limit)
+        // var formattedLimit = limit + ".000+09:00";
+        // console.log(formattedLimit)
+        const tokenString = sessionStorage.getItem('token')
+        const userToken = JSON.parse(tokenString)
+        
+
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            mode: 'cors',
+            credentials: 'same-origin',
+            body: JSON.stringify({ 
+                userId: userToken,
+                todoTitle: title,
+                todoContent: detail,
+                limitDateTime: limit,
+                todoId: todoId,
+                done: false
             })
-        .catch(() => null)  
+        };
+        const response = await fetch(url, requestOptions)
+        .then(() => {
+            dispatch(push('/'));
+        })
+        .catch(() => console.log("sippai"))                   
     }
 }

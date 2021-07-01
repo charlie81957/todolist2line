@@ -2,6 +2,10 @@ package com.charlie.todolist2line.controller;
 
 import com.charlie.todolist2line.dto.UserInfoDto;
 import com.charlie.todolist2line.service.UserService;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -32,8 +36,12 @@ public class UserController {
      */
     @ResponseBody
     @RequestMapping(value = "/signUp")
+    @CrossOrigin
     public String signUp(@RequestBody UserInfoDto userInfoDto) {
-        return userService.createUser(userInfoDto);
+        System.out.println(userInfoDto);
+        String test = userService.createUser(userInfoDto);
+        System.out.println(test);
+        return test;
     }
 
     /**
@@ -44,6 +52,7 @@ public class UserController {
     @RequestMapping(value = "/signIn", method = RequestMethod.POST)
     @CrossOrigin
     public boolean SignIn(@RequestBody UserInfoDto userInfoDto) {
+        System.out.println(userInfoDto);
         return userService.isAbleToLogin(userInfoDto);
     }
 
@@ -57,7 +66,18 @@ public class UserController {
     @RequestMapping(value = "/isExist", method = RequestMethod.POST)
     @CrossOrigin
     public boolean isExistUserId(@RequestBody String userId) {
-        return userService.isExistUserId(userId);
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode rootNode = mapper.readTree(userId);
+            String test = rootNode.get("userId").toString();
+            System.out.println(test.substring(1, test.length()-1));
+            return userService.isExistUserId(test.substring(1, test.length()-1));
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+        
         // return true;
     }
 }

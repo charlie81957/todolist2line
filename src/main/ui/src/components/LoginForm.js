@@ -6,6 +6,7 @@ import { signInAction, validatePwAction } from '../actions/actions';
 import {signIn, validateUid, validatePassword, signUp, isExistUid} from '../operation';
 // import ConfimationModal from './ConfimationModal';
 import Modal from 'react-modal';
+import {push} from 'connected-react-router';
 
 const LoginForm = () => {
 
@@ -25,6 +26,7 @@ const LoginForm = () => {
     const [uid, setUid] = useState("")
 
     const infoUser = useSelector(state => state.users)
+    // setLoginedUser(infoUser.uid)
     
     // 1回目にOnBlurが動くことを回避するフラグ
     var message1 = undefined;
@@ -33,7 +35,6 @@ const LoginForm = () => {
         // message1 = dispatch(validateUid(e.target.value))
         // 値検証の結果をStoreに保存
         dispatch(validateUid(e.target.value))
-
     },[]);
 
     // 1回目にOnBlurが動くことを回避するフラグ
@@ -53,6 +54,11 @@ const LoginForm = () => {
 
     // Modal flag
     const [showModal, setShowModal] = useState(false);
+    const onRegistClick = () => {
+        dispatch(signUp(uid, password))
+        // dispatch(push('/'))
+        setShowModal(false)
+    }
 
     // modal style
     const modalStyle = {
@@ -63,11 +69,12 @@ const LoginForm = () => {
         },
         content: {
             position: "absolute",
-            width: "200px",
+            width: "240px",
             height: "200px",
             marginLeft: "auto",
             marginRight: "auto",
-            marginTop: "2rem"
+            marginTop: "2rem",
+            textAlign: "center"
         }
     }
 
@@ -151,8 +158,8 @@ const LoginForm = () => {
             <h5>新規登録</h5>
             <p>入力されたID.Passwordでユーザー登録を行いますよろしいですか？</p>
             
-        <button style={{display: 'inline-block'}} className="btn btn-primary" onClick={() => dispatch(signUp(uid, password))}>登録</button>
-        <button style={{display: 'inline-block'}} className="btn btn-danger" onClick={() => setShowModal(false)}>キャンセル</button>
+        <button style={{display: 'inline-block'}} className="btn btn-primary m-1" onClick={onRegistClick}>登録</button>
+        <button style={{display: 'inline-block'}} className="btn btn-danger m-1" onClick={() => setShowModal(false)}>キャンセル</button>
       </Modal>
     </div>
     );

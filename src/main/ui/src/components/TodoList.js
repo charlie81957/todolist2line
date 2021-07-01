@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { connect } from 'react-redux';
-import { fetchTodoList, deleteTodo, editTodo } from '../operation';
+import { fetchTodoList, deleteTodo, editTodo, completedTodoOperation, notCompletedTodoOperation } from '../operation';
 import Header from './Header';
 import {useDispatch, useSelector} from 'react-redux';
 import {Link} from 'react-router-dom';
@@ -17,11 +17,14 @@ const TodoList = () => {
     
     useEffect(() => {
         // dispatch(fetchTodoList(loginedUser));
-        dispatch(fetchTodoList("test"));
+        const tokenString = sessionStorage.getItem('token')
+        const userToken = JSON.parse(tokenString)
+        dispatch(fetchTodoList(userToken));
     },[])
 
     const onCheckClick = () => {
         dispatch(deleteTodo(todoId))
+        setShowModal(false)
     }
     const openDeletedModal = (e) => {
         setTodoId(e.target.id)
@@ -35,6 +38,22 @@ const TodoList = () => {
             state: selectedTodo
         }))
     }
+    const completedTodo = (e) => {
+        const selectedTodoId = e.target.id
+        const selectedTodoC = todoList.find((sp) => sp.todoId == selectedTodoId)
+        dispatch(completedTodoOperation(selectedTodoC.todoId, selectedTodoC.todoTitle, selectedTodoC.todoContent, selectedTodoC.limitDateTime, 5))
+        dispatch(push('/todo/regist'))
+    }
+
+    const notCompletedTodo = (e) => {
+        const selectedTodoId = e.target.id
+        console.log(e.target.id)
+        const selectedTodoC = todoList.find((sp) => sp.todoId == selectedTodoId)
+        console.dir(selectedTodoC)
+        dispatch(notCompletedTodoOperation(selectedTodoC.todoId, selectedTodoC.todoTitle, selectedTodoC.todoContent, selectedTodoC.limitDateTime, 5))
+        dispatch(push('/todo/regist'))
+    }
+    
     // Modal flag
     const [showModal, setShowModal] = useState(false);
     const [todoId, setTodoId] = useState("")
@@ -48,11 +67,12 @@ const TodoList = () => {
         },
         content: {
             position: "absolute",
-            width: "200px",
-            height: "200px",
+            width: "250px",
+            height: "180px",
             marginLeft: "auto",
             marginRight: "auto",
-            marginTop: "2rem"
+            marginTop: "2rem",
+            textAlign: "center"
         }
     }
 
@@ -74,8 +94,8 @@ const TodoList = () => {
             {todoList && todoList.filter(fil => fil.done == false)
                 .map(post => 
                   <tr key={post.todoId}>
-                    <th ><a className="card-link" id={post.todoId} onClick={openDeletedModal}><i className="fas fa-check" id={post.todoId}></i></a></th>
-                    <td className="text-left"><Link to={`/blog-posts/${post.todoId}`}>{post.todoTitle}</Link></td>
+                    <th ><a className="card-link" id={post.todoId}><i className="fas fa-check" id={post.todoId} onClick={completedTodo}></i></a></th>
+                    <td className="text-left">{post.todoTitle}</td>
                     <td><a className="card-link"><i className="fas fa-edit" onClick={editTodoClick} id={post.todoId}></i></a></td>
                   </tr>                 
             )}
@@ -95,12 +115,12 @@ const TodoList = () => {
             </thead>
             <tbody>
                             
-            {todoList && todoList.filter(fil => fil.done == false)
+            {todoList && todoList.filter(fil => fil.done == true)
                 .map(post => 
                     <tr key={post.todoId}>
                     <th ><a className="card-link" id={post.todoId} onClick={openDeletedModal}><i className="fas fa-times" id={post.todoId}></i></a></th>
-                    <td className="text-left"><Link to={`/blog-posts/${post.todoId}`}>{post.todoTitle}</Link></td>
-                    <td><a className="card-link"><i className="fas fa-edit"></i></a></td>
+                    <td className="text-left">{post.todoTitle}</td>
+                    <td><a className="card-link"><i className="fas fa-arrow-circle-up"  id={post.todoId} onClick={notCompletedTodo}></i></a></td>
                   </tr>                 
             )}
             </tbody>
@@ -113,11 +133,11 @@ const TodoList = () => {
                 ariaHideApp={false}
                 style={modalStyle}
                 >
-                    <h5>削除</h5>
+                    <h5 className="font-weight-bold">削除</h5>
                     <p>完了した項目を削除します。<br/>よろしいですか</p>
                     
-                <button style={{display: 'inline-block'}} className="btn btn-primary" onClick={onCheckClick}>削除</button>
-                <button style={{display: 'inline-block'}} className="btn btn-danger" onClick={() => setShowModal(false)}>キャンセル</button>
+                <button style={{display: 'inline-block'}} className="btn btn-primary m-1" onClick={onCheckClick}>削除</button>
+                <button style={{display: 'inline-block'}} className="btn btn-danger m-1" onClick={() => setShowModal(false)}>キャンセル</button>
             </Modal>
         </div>
         )

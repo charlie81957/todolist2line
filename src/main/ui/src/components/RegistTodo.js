@@ -1,15 +1,21 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { createTodo } from '../operation';
+import { createTodo, editTodo } from '../operation';
 import { useState, useCallback} from 'react';
-
+import {push} from 'connected-react-router';
+import Header from './Header';
 
 const RegistTodo = (props) => {
     const editingTodo = props.location.state
-    // console.dir(editingTodo)
+    // 初期値を入れる
+    var d = new Date();
+    var datetext = d.toTimeString()
+    datetext = datetext.split(' ')[0];
+    var dateString = d.getFullYear() +"-"+ (d.getMonth()+1) +"-"+ d.getDate() + "T" + datetext.split(':')[0] + ":" + datetext.split(':')[1];
+    console.log(dateString)
     /**
      * click method
-    //  */
+　　　*/
     const dispatch = useDispatch();
 
     const [title, setTitle] = useState(editingTodo ? editingTodo.todoTitle : "")
@@ -18,11 +24,12 @@ const RegistTodo = (props) => {
     },[]);
     const [detail, setDetail] = useState(editingTodo ? editingTodo.todoContent : "")
     const inputDetail = useCallback((e) => { 
-        setDetail(e.target.value);
+      setDetail(e.target.value);
     },[]);
-    const [limit, setLimit] = useState(editingTodo ? editingTodo.limitDateTime : "")
+    
+    const [limit, setLimit] = useState(editingTodo ? editingTodo.limitDateTime.substr(0, 16) : dateString)
     const inputLimit = useCallback((e) => { 
-        setLimit(e.target.value);
+      setLimit(e.target.value);
     },[]);
     // const [notice, setNotice] = useState(editingTodo ? editingTodo.todoTitle : "")
     const [notice, setNotice] = useState("")
@@ -30,18 +37,28 @@ const RegistTodo = (props) => {
         setNotice(e.target.value);
     },[]);
     
-    // 最初に読んでくれなくてエラーが出ている。Todo-->期限の初期値に現在のTImeを入れる
-    var d = new Date();
-    var datetext = d.toTimeString()
-    datetext = datetext.split(' ')[0];
-    var dateString = d.getFullYear() +"-"+ (d.getMonth()+1) +"-"+ d.getDate() + " " + datetext.split(':')[0] + ":" + datetext.split(':')[1] + ":" + datetext.split(':')[2] + ".000+09:00";
-    const [currentDateTime, setCurrentDateTime] = useState(dateString)
-    // console.log(currentDateTime)
+
+    // INSERT or UPDATE
+    const checkFlag = () => {
+      if (!editingTodo) {
+        console.dir(infoTodoList)
+        dispatch(createTodo(title, detail, limit, notice))
+        console.dir(infoTodoList)
+        if (infoTodoList.createFlag) {
+          dispatch(push('/'))
+        }
+      }
+      else {
+        dispatch(editTodo(editingTodo.todoId, title, detail, limit, notice))
+      }
+    }
 
     const infoUser = useSelector(state => state.users)
+    const infoTodoList = useSelector(state => state.todoList)
 
     return (
       <div className="col-12">
+        <Header />
         <h4 className="mb-3">新規登録</h4>
         <form className="needs-validation" data-toggle="validator">
           <div className="row g-3">
@@ -84,7 +101,7 @@ const RegistTodo = (props) => {
           <button 
             className="w-100 btn btn-primary btn-lg mt-3" 
             type="submit"
-            onClick={() => dispatch(createTodo(title, detail, limit, notice))}
+            onClick={checkFlag}
           >追加</button>
         </form>
       </div>

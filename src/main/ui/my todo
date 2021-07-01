@@ -77,3 +77,16 @@ TodoIdを押下したら、Modalで詳細見せてもいいかも
 limitDateTimeにNullを入れないようにデータを入れる
 limitをどういう形にすれば受け取ってもらうえる
 limitDateTime=1970-01-01 09:00:00.0)
+
+isDoneをTrueFalseにする方法
+完了ボタン押下でisDoneをTrueにする
+
+新規登録、完了した項目から上に戻す、タイトルのLinkをなくす
+
+userIdの時点でIDExist検証行ったら、セキュリティ的にアウトじゃない？
+当てずっぽで入力して、UserIdの検証通ったら、いいわけやん
+
+全体的にAJAXの時はres.text()で良いのかも
+これだと文字列受け取れる
+
+登録した後にList画面に遷移しない理由
