@@ -1,5 +1,5 @@
 import { routerActions } from 'connected-react-router';
-import {SIGN_IN, SIGN_OUT, VALID_UID, VALID_PW, EXIST_UID, FETCH_TODO_LIST, DELETE_TODO,CREATE_TODO } from './constants';
+import {SIGN_IN, SIGN_OUT, VALID_UID, VALID_PW, EXIST_UID, FETCH_TODO_LIST, DELETE_TODO,CREATE_TODO, MODIFY_TODO_STATUS } from './constants';
 
 export const signInAction = (userState) => {
     return {
@@ -72,3 +72,10 @@ export const createTodoAction = () => {
         type: CREATE_TODO
     }
 }
+
+export const modifyTodoStatusAction = () => {
+    return {
+        type: MODIFY_TODO_STATUS
+    }
+}
+

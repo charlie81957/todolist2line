@@ -27,18 +27,18 @@ import { push } from 'connected-react-router';
 //     )
 //   }
 // }
-const App = () => {
-  const requireAuth = () => {
-    console.log(loginedUser.length)
-    if (loginedUser.length < 1) {
-      // push('/login')
-      return false
-    }
-    return true
-  }
+// const App = () => {
+  // const requireAuth = () => {
+  //   console.log(loginedUser.length)
+  //   if (loginedUser.length < 1) {
+  //     // push('/login')
+  //     return false
+  //   }
+  //   return true
+  // }
   
-  const userSelector = useSelector(state => state.users)
-  const loginedUser = getLoginedUser(userSelector)
+  // const userSelector = useSelector(state => state.users)
+  // const loginedUser = getLoginedUser(userSelector)
 
 const checkAuth = () => {
   const tokenString = sessionStorage.getItem('token')
@@ -75,5 +75,5 @@ const App = () => {
     </div>
   )
 }
-}
+// }
 export default App;

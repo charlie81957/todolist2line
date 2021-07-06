@@ -6,3 +6,4 @@ export const EXIST_UID = 'EXIST_UID';
 export const FETCH_TODO_LIST = 'FETCH_TODO_LIST';
 export const DELETE_TODO = 'DELETE_TODO';
 export const CREATE_TODO = 'CREATE_TODO';
+export const MODIFY_TODO_STATUS = 'MODIFY_TODO_STATUS';

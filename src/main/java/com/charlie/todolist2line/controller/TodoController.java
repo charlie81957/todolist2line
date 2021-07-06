@@ -43,10 +43,9 @@ public class TodoController {
     @RequestMapping("/todo/save")
     @ResponseBody
     @CrossOrigin
-    public void save(@RequestBody TodoDto todoDto) {
-        System.out.println("hellossave");
-        System.out.println(todoDto.getTodoId());
+    public String save(@RequestBody TodoDto todoDto) {
         todoService.saveTodo(todoDto);
+        return "success";
     }
 
     @RequestMapping("/todo/delete")

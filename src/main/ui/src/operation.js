@@ -1,4 +1,4 @@
-import {signInAction, validateUidAction, validatePwAction, isExistUidAction, fetchTodoListAction, deleteTodoAction, createTodoAction } from './actions/actions';
+import {signInAction, validateUidAction, validatePwAction, isExistUidAction, fetchTodoListAction, deleteTodoAction, createTodoAction, modifyTodoStatusAction } from './actions/actions';
 import {push} from 'connected-react-router';
 import {useDispatch, useSelector} from 'react-redux';
 
@@ -200,7 +200,7 @@ export const createTodo = (title, detail, limit, notice) => {
 
         // When we regist todo, check valition 
         if (title.length < 3) {
-            alert("3文字以上で入力してください");
+            alert("タイトルは3文字以上で入力してください");
             return false;
         }
         if (limit.length < 1) {
@@ -223,7 +223,7 @@ export const createTodo = (title, detail, limit, notice) => {
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            mode: 'cors',
+            // mode: 'cors',
             credentials: 'same-origin',
             body: JSON.stringify({ 
                 userId: userToken,
@@ -232,17 +232,15 @@ export const createTodo = (title, detail, limit, notice) => {
                 limitDateTime: limit,
             })
         };
-        try {
-            dispatch(createTodoAction())
-            await fetch(url, requestOptions)
-            
-        } catch (e) {
-            console.error(e)
-        }
-        // const response = await fetch(url, requestOptions).then(() => {
-        //     dispatch(createTodoAction())
-        // })
-        // .catch(() => console.log("sippai"))                 
+
+        return await fetch(url, requestOptions)
+        .then((res) => res.text())
+        .then((resT) => {
+            if (resT == "success") {
+                dispatch(push('/ho'))
+            }
+        })
+
     }
 }
 
@@ -370,8 +368,9 @@ export const completedTodoOperation = (todoId, title, detail, limit, notice) => 
             })
         };
         const response = await fetch(url, requestOptions)
-        .then(() => {
-            dispatch(push('/'));
+        .then((res) => {
+            console.dir(res)
+            dispatch(modifyTodoStatusAction());
         })
         .catch(() => console.log("sippai"))                   
     }
@@ -404,7 +403,7 @@ export const notCompletedTodoOperation = (todoId, title, detail, limit, notice) 
         };
         const response = await fetch(url, requestOptions)
         .then(() => {
-            dispatch(push('/'));
+
         })
         .catch(() => console.log("sippai"))                   
     }

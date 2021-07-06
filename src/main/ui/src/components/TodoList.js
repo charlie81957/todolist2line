@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import { connect } from 'react-redux';
 import { fetchTodoList, deleteTodo, editTodo, completedTodoOperation, notCompletedTodoOperation } from '../operation';
 import Header from './Header';
@@ -14,13 +14,18 @@ const TodoList = () => {
     const todoList = getTodoList(todoSelector)
     const userSelector = useSelector(state => state.users)
     const loginedUser = getLoginedUser(userSelector)
+
+    // Modal flag
+    const [showModal, setShowModal] = useState(false);
+    const [todoId, setTodoId] = useState("")
+    const [todoStatus, setTodoStatus] = useState(0)
     
     useEffect(() => {
         // dispatch(fetchTodoList(loginedUser));
         const tokenString = sessionStorage.getItem('token')
         const userToken = JSON.parse(tokenString)
         dispatch(fetchTodoList(userToken));
-    },[])
+    },[todoStatus])
 
     const onCheckClick = () => {
         dispatch(deleteTodo(todoId))
@@ -42,7 +47,8 @@ const TodoList = () => {
         const selectedTodoId = e.target.id
         const selectedTodoC = todoList.find((sp) => sp.todoId == selectedTodoId)
         dispatch(completedTodoOperation(selectedTodoC.todoId, selectedTodoC.todoTitle, selectedTodoC.todoContent, selectedTodoC.limitDateTime, 5))
-        dispatch(push('/todo/regist'))
+        // dispatch(push('/'))
+        setTodoStatus(() => todoStatus + 1)
     }
 
     const notCompletedTodo = (e) => {
@@ -51,12 +57,10 @@ const TodoList = () => {
         const selectedTodoC = todoList.find((sp) => sp.todoId == selectedTodoId)
         console.dir(selectedTodoC)
         dispatch(notCompletedTodoOperation(selectedTodoC.todoId, selectedTodoC.todoTitle, selectedTodoC.todoContent, selectedTodoC.limitDateTime, 5))
-        dispatch(push('/todo/regist'))
+        setTodoStatus(() => todoStatus + 1)
     }
     
-    // Modal flag
-    const [showModal, setShowModal] = useState(false);
-    const [todoId, setTodoId] = useState("")
+    
 
     // modal style
     const modalStyle = {
